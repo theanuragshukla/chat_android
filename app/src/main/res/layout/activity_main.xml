@@ -2,48 +2,65 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
     android:orientation="vertical"
     android:padding="16dp"
-    android:theme="@style/AppTheme">
+    android:theme="@style/AppTheme"
+    android:layout_gravity="center"
+    >
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/usernameTextInputLayout"
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:layout_weight="1"
+        >
+
+    <TextView
+        android:id="@+id/textView1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Username"
-        app:errorEnabled="true"
-        app:errorTextAppearance="@style/TextAppearance.MaterialComponents.Body1">
+        android:text="Where we going ?"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+        android:textColor="@color/colorAccent"
+        android:layout_marginBottom="50dp"
+        />
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/usernameTextInputEditText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Body1" />
-
-    </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/passwordTextInputLayout"
+        android:id="@+id/roomInputLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Password"
+        android:hint="Room ID"
         app:errorEnabled="true"
-        app:errorTextAppearance="@style/TextAppearance.MaterialComponents.Body1">
+        >
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/passwordTextInputEditText"
+            android:id="@+id/roomTextInputEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textPassword"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Body1" />
+            android:focusableInTouchMode="true"
+            android:lines="1"
+            android:maxLines="1"
+            android:background="@color/colorSecondary"
+            android:selectAllOnFocus="false"
+            android:singleLine="true"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+            android:textColor="@color/colorAccent"
+            android:textSize="16sp" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/loginButton"
-        android:layout_width="match_parent"
+        android:id="@+id/joinButton"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Login"
-        style="@style/Widget.MaterialComponents.Button.OutlinedButton" />
+        android:foregroundTint="#FFFFFF"
+        android:text="Join Room"
+        android:textColor="#FFFFFF"
+        app:backgroundTint="@color/colorSecondary" />
 
+    </androidx.appcompat.widget.LinearLayoutCompat>
 </LinearLayout>

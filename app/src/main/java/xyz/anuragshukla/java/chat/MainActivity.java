@@ -2,8 +2,11 @@ package xyz.anuragshukla.java.chat;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 
@@ -13,27 +16,24 @@ import com.google.android.material.textfield.TextInputEditText;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
-interface LoginResult {
+interface JoinResult {
     void onResponse(boolean success);
 }
 
 
 public class MainActivity extends AppCompatActivity {
 
-    private void login(String username, String password, final LoginResult callback) {
-        LoginRequest request = new LoginRequest(username, password);
+    private void login(String  roomId, final LoginResult callback) {
+        JoinRequest request = new JoinRequest(roomId);
         MyApi myApi = APIClient.getClient().create(MyApi.class);
-        Call<LoginResponse> call = myApi.login(request);
-        call.enqueue(new Callback<LoginResponse>() {
+        Call<JoinResponse> call = myApi.joinRoom(request);
+        call.enqueue(new Callback<JoinResponse>() {
             @Override
-            public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
+            public void onResponse(Call<JoinResponse> call, Response<JoinResponse> response) {
                 if (response.isSuccessful()) {
-                    LoginResponse loginResponse = response.body();
-                    System.out.println(response.body());
-                    Log.d("TAG", loginResponse.getName());
+                    JoinResponse loginResponse = response.body();
+                    System.out.println(loginResponse.getToken());
                     callback.onResponse(true);
 
                 } else {
@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<LoginResponse> call, Throwable t) {
+            public void onFailure(Call<JoinResponse> call, Throwable t) {
                 Log.d("TAG", t.getMessage());
                 callback.onResponse(false);
 
@@ -51,22 +51,34 @@ public class MainActivity extends AppCompatActivity {
         });
 
     }
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        TextInputEditText usernameTextInputEditText = findViewById(R.id.usernameTextInputEditText);
-        TextInputEditText passwordTextInputEditText = findViewById(R.id.passwordTextInputEditText);
-        MaterialButton loginButton = findViewById(R.id.loginButton);
+        TextInputEditText roomTextInputEditText = findViewById(R.id.roomTextInputEditText);
+        MaterialButton loginButton = findViewById(R.id.joinButton);
+        new Thread(new CheckAuth(this, new VerifyAuth() {
+            @Override
+            public void onResponse(String token) {
+                Intent redirect;
+                System.out.println(token);
+                if(token==null){
+                    System.out.println("token null");
+                    redirect = new Intent(MainActivity.this, LoginActivity.class);
+                    startActivity(redirect);
+                }
+            }
+        })).start();
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // Perform the login action here
-                String username = usernameTextInputEditText.getText().toString();
-                String password = passwordTextInputEditText.getText().toString();
-              login(username, password, new LoginResult() {
+                String roomId = roomTextInputEditText.getText().toString();
+
+              login(roomId,  new LoginResult() {
                   @Override
                   public void onResponse(boolean success) {
 

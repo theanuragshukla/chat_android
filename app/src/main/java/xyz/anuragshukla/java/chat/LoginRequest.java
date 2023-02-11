@@ -1,11 +1,11 @@
 package xyz.anuragshukla.java.chat;
 public class LoginRequest {
     private String username;
-    private String password;
+    private String uid;
 
-    LoginRequest(String user, String pass){
-        this.username = user;
-        this.password = pass;
+    LoginRequest(String username, String uid){
+        this.uid = uid;
+        this.username = username;
     }
     // constructor, getters, and setters
 }

@@ -11,14 +11,19 @@ import java.util.List;
 
 class Message {
 
-    private String text;
+    private String msg;
+    private String sender;
 
-    public Message(String text) {
-        this.text = text;
+    public Message(String sender, String msg) {
+        this.sender = sender;
+        this.msg = msg;
     }
 
-    public String getText() {
-        return text;
+    public String getSender() {
+        return sender;
+    }
+    public String getMsg(){
+        return msg;
     }
 }
 
@@ -40,7 +45,8 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
     @Override
     public void onBindViewHolder(MessageViewHolder holder, int position) {
         Message message = messages.get(position);
-        holder.textView.setText(message.getText());
+        holder.msgView.setText(message.getMsg());
+        holder.senderView.setText(message.getSender());
     }
 
     @Override
@@ -50,11 +56,13 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
 
     static class MessageViewHolder extends RecyclerView.ViewHolder {
 
-        TextView textView;
+        TextView msgView;
+        TextView senderView;
 
         public MessageViewHolder(View itemView) {
             super(itemView);
-            textView = itemView.findViewById(R.id.textView);
+            senderView = itemView.findViewById(R.id.senderView);
+            msgView = itemView.findViewById(R.id.textView);
         }
     }
 }

@@ -1,12 +1,12 @@
 package xyz.anuragshukla.java.chat;
 
 public class JoinResponse {
-private String token;
-public JoinResponse(String token){
-    this.token = token;
+private String sessionToken;
+public JoinResponse(String sessionToken){
+    this.sessionToken = sessionToken;
 }
 
 public String getToken(){
-    return  this.token;
+    return  this.sessionToken;
 }
 }

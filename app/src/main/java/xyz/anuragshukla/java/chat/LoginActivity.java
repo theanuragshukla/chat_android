@@ -81,7 +81,6 @@ public class LoginActivity extends AppCompatActivity {
                 Intent redirect;
                 System.out.println(token);
                 if(token!=null){
-                    System.out.println("token null");
                     redirect = new Intent(LoginActivity.this, MainActivity.class);
                     startActivity(redirect);
                 }

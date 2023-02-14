@@ -24,6 +24,7 @@
             android:layout_marginLeft="4dp"
             android:cursorVisible="true"
             android:text="sender name"
+            android:id="@+id/senderView"
             android:textAppearance="@style/TextAppearance.AppCompat.Display1"
             android:textColor="#00FFFF"
             android:textFontWeight="1000"

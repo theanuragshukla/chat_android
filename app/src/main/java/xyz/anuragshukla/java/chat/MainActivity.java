@@ -18,40 +18,37 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 interface JoinResult {
-    void onResponse(boolean success);
+    void onResponse(String sessionID);
 }
 
-
 public class MainActivity extends AppCompatActivity {
-
-    private void login(String  roomId, final LoginResult callback) {
-        JoinRequest request = new JoinRequest(roomId);
+    private String authToken = null;
+    private String sessionToken = null;
+    private void joinRoom(String  roomId, final JoinResult callback) {
+        JoinRequest request = new JoinRequest(roomId, authToken);
         MyApi myApi = APIClient.getClient().create(MyApi.class);
         Call<JoinResponse> call = myApi.joinRoom(request);
         call.enqueue(new Callback<JoinResponse>() {
             @Override
             public void onResponse(Call<JoinResponse> call, Response<JoinResponse> response) {
                 if (response.isSuccessful()) {
-                    JoinResponse loginResponse = response.body();
-                    System.out.println(loginResponse.getToken());
-                    callback.onResponse(true);
+                    JoinResponse joinResponse = response.body();
+                    callback.onResponse(joinResponse.getToken());
 
                 } else {
                     System.out.println(response.body());
-                    callback.onResponse(false);
+                    callback.onResponse(null);
                 }
             }
 
             @Override
             public void onFailure(Call<JoinResponse> call, Throwable t) {
                 Log.d("TAG", t.getMessage());
-                callback.onResponse(false);
+                callback.onResponse(null);
 
             }
         });
-
     }
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +65,8 @@ public class MainActivity extends AppCompatActivity {
                     System.out.println("token null");
                     redirect = new Intent(MainActivity.this, LoginActivity.class);
                     startActivity(redirect);
+                }else{
+                    authToken = token;
                 }
             }
         })).start();
@@ -78,18 +77,21 @@ public class MainActivity extends AppCompatActivity {
                 // Perform the login action here
                 String roomId = roomTextInputEditText.getText().toString();
 
-              login(roomId,  new LoginResult() {
-                  @Override
-                  public void onResponse(boolean success) {
-
-                      if(true){
-                          Intent moveToChat = new Intent(MainActivity.this, ChatActivity.class);
-                          startActivity(moveToChat);
-                      }
-                  }
-              });
+                joinRoom(roomId,  new JoinResult() {
+                    @Override
+                    public void onResponse(String sessionID) {
+                        if(sessionID!=null){
+                            SharedPreferences prefs = getSharedPreferences("SESSION",MODE_PRIVATE);
+                            SharedPreferences.Editor editor = prefs.edit();
+                            editor.putString("sessionID", sessionID);
+                            editor.commit();
+                            sessionToken = sessionID;
+                            Intent moveToChat = new Intent(MainActivity.this, ChatActivity.class);
+                            startActivity(moveToChat);
+                        }
+                    }
+                });
             }
         });
-
     }
 }
